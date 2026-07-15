@@ -1,0 +1,110 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts/roboto.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Courgette';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/courgette.ttf') format('truetype');
+}
+
+@theme {
+  /* Font families */
+  --font-body: "Roboto", sans-serif;
+  --font-heading: "Courgette", cursive;
+  /* Colors */
+  --color-bg: var(--bg-color);
+  --color-primary: var(--primary-color);
+  --color-primary-light: var(--primary-color-light);
+  --color-secondary: var(--secondary-color);
+  --color-accent: var(--accent-color);
+  --color-gray-custom: var(--gray-color);
+  --color-text-custom: var(--text-color);
+  --color-text-inverted: var(--text-color-inverted);
+  --color-border-custom: var(--border-color);
+  /* Backgrounds */
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
+
+:root {
+  /* Light mode colors */
+  --bg-color: #f5f8f8;
+  --primary-color: #007a78;
+  --primary-color-light: #e0f2f1;
+  --secondary-color: #2ec4b6;
+  --accent-color: #ff9f1c;
+  --gray-color: #e8f1f1;
+  --text-color: #0b2524;
+  --text-color-inverted: #f0fdfc;
+  --border-color: #aba9a9;
+
+  --header-text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode colors */
+    --bg-color: #091111;
+    --primary-color: #2ec4b6;
+    --primary-color-light: #122524;
+    --secondary-color: #00f5d4;
+    --accent-color: #e2afff;
+    --gray-color: #111f1e;
+    --text-color: #f0fdfc;
+    --text-color-inverted: #091111;
+    --border-color: #27514e;
+  }
+}
+
+/* Utilities */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-shadow {
+  text-shadow: 0 5px 15px #1a1a1a;
+}
+
+@utility heading-dinamic {
+  font-size: clamp(3rem, 5vw, 6rem);
+}
+
+@utility subheading-dinamic {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+/* Variants */
+@variant group-current (.group.current &);
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shrink-x {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
