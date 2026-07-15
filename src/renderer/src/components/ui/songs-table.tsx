@@ -119,7 +119,7 @@ export function SongsTable({
                                 className="sr-only peer"
                                 onChange={() => onSongPress(song.id, song.active)}
                               />
-                              <div className="relative w-11 h-6 bg-custom rounded-full peer-checked:after:translate-x-full peer-checked:after:border-secondary after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-bg after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+                              <div className="relative w-11 h-6 rounded-full bg-[var(--border-color)] after:content-[''] after:absolute after:bg-[var(--bg-color)] after:top-[2px] after:start-[2px] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--secondary-color)] peer-checked:after:translate-x-full"></div>
                             </label>
                           )}
                         </td>
