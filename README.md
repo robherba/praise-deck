@@ -1,4 +1,4 @@
-# Praise Deck
+# Pan de Vida
 
 A modern, fast, and lightweight song presentation and projection desktop application for churches. Built on top of Electron, Vite, React, TypeScript, and Tailwind CSS v4.
 
@@ -52,6 +52,22 @@ Compile the application assets and package them into production-ready installers
 
     # Target Linux (.deb)
     npm run build:linux
+
+---
+
+## 🍏 Note for macOS Users (App "Damaged" Fix)
+
+Because this is a custom application built for internal church use, it is distributed without an official Apple Developer paid signature. When downloading the app from the web, macOS Gatekeeper security will flag it as **"damaged and can't be opened"** as a false positive.
+
+To bypass this restriction and run the application normally, please follow these steps:
+
+1. Drag **Pan de Vida** from the `.dmg` into your local **Applications** folder.
+2. Open your Mac's **Terminal** app (Press `Cmd + Space` and search for "Terminal").
+3. Copy, paste, and run the following command to remove the web quarantine attribute:
+
+    xattr -cr "/Applications/Pan de Vida.app"
+
+4. Close the terminal. You can now launch the app normally with a standard double-click.
 
 ---
 
