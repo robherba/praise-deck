@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: praise-deck
+appId: com.robertherba.praisedeck
+productName: Pan de Vida
 directories:
   buildResources: build
 files:

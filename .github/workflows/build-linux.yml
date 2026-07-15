@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -27,10 +29,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y dpkg fakeroot rpm gcc g++ make
 
       - name: Install NPM Dependencies
-        run: npm  ci
+        run: npm ci
 
-      - name: Build Application
-        run: npm run build:linux
+      - name: Build and Publish Application
+        run: npm run build && npx electron-builder --linux --publish always
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
