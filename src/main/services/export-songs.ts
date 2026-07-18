@@ -2,30 +2,34 @@ import { dialog, BrowserWindow, shell } from 'electron';
 import fs from 'fs/promises';
 import { getActiveSongs } from '../db/database';
 
-// Exports active songs to a PDF document.
 export async function exportSongsPDF(mainWindow: BrowserWindow): Promise<void> {
+  let printWindow: BrowserWindow | null = null;
+
   try {
     const songs = await getActiveSongs();
     
     if (!songs || songs.length === 0) {
+      mainWindow.webContents.send('message-from-electron', 'No songs selected. Please select at least one song before exporting.', 'info');
       dialog.showMessageBox(mainWindow, {
         type: 'info',
-        title: 'Exportar PDF',
-        message: 'No hay cantos seleccionados.',
-        detail: 'Por favor, selecciona al menos un canto antes de exportar.',
-        buttons: ['Aceptar'],
+        title: 'Export PDF',
+        message: 'No songs selected.',
+        detail: 'Please select at least one song before exporting.',
+        buttons: ['OK'],
       });
       return;
     }
 
     const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
-      title: 'Guardar cantos seleccionados como PDF',
-      defaultPath: 'cantos-seleccionados.pdf',
-      buttonLabel: 'Guardar PDF',
-      filters: [{ name: 'Documentos PDF', extensions: ['pdf'] }],
+      title: 'Save selected songs as PDF',
+      defaultPath: 'selected-songs.pdf',
+      buttonLabel: 'Save PDF',
+      filters: [{ name: 'PDF Documents', extensions: ['pdf'] }],
     });
 
     if (canceled || !filePath) return;
+
+    mainWindow.webContents.send('message-from-electron', 'Generating PDF file, please wait...', 'loading');
 
     const songsHTML = songs.map((song: any, index: number) => {
       const category = song.category ? String(song.category) : '';
@@ -70,34 +74,46 @@ export async function exportSongsPDF(mainWindow: BrowserWindow): Promise<void> {
       </html>
     `;
 
-    const printWindow = new BrowserWindow({
+    printWindow = new BrowserWindow({
       show: false,
       webPreferences: { nodeIntegration: false, contextIsolation: true },
     });
 
-    await printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`);
-
     printWindow.webContents.once('did-finish-load', async () => {
       try {
-        const pdfData = await printWindow.webContents.printToPDF({
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        const pdfData = await printWindow!.webContents.printToPDF({
           printBackground: true,
           margins: { marginType: 'default' },
         });
         
         await fs.writeFile(filePath, pdfData);
-        printWindow.destroy();
+        
+        if (printWindow) {
+          printWindow.destroy();
+          printWindow = null;
+        }
 
-        mainWindow.webContents.send('message-from-electron', 'Los cantos seleccionados se exportaron a PDF correctamente.', 'success');
+        mainWindow.webContents.send('message-from-electron', 'Selected songs successfully exported to PDF.', 'success');
         shell.showItemInFolder(filePath);
       } catch (printErr) {
-        printWindow.destroy();
+        if (printWindow) {
+          printWindow.destroy();
+          printWindow = null;
+        }
         console.error('Error printing PDF:', printErr);
-        mainWindow.webContents.send('message-from-electron', 'Error al generar el PDF.', 'error');
+        mainWindow.webContents.send('message-from-electron', 'Failed to generate PDF document.', 'error');
       }
     });
 
+    printWindow.loadURL(`data:text/html;base64,${Buffer.from(htmlContent).toString('base64')}`);
+
   } catch (error) {
+    if (printWindow) {
+      printWindow.destroy();
+    }
     console.error('Error in exportSongsPDF:', error);
-    mainWindow.webContents.send('message-from-electron', 'Ocurrió un error al intentar exportar los cantos.', 'error');
+    mainWindow.webContents.send('message-from-electron', 'An unexpected error occurred while exporting songs.', 'error');
   }
 }
