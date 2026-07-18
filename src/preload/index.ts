@@ -1,8 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { CustomAPI } from './types'; // Ajusta la ruta si tu interfaz CustomAPI vive en otro archivo de tipos
+import { contextBridge, ipcRenderer } from 'electron';
+import { CustomAPI } from './types';
 
-// 1. Implementamos CADA UNA de las funciones físicas usando ipcRenderer
 const api: CustomAPI = {
   addSong: (params) => ipcRenderer.invoke('add-song', params),
   getSongs: (params) => ipcRenderer.invoke('get-songs', params),
@@ -50,11 +49,10 @@ const api: CustomAPI = {
   }
 };
 
-// 2. Registramos FÍSICAMENTE los objetos en el navegador
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api); // 👈 ¡Esto es lo que crea físicamente el objeto en el navegador!
+    contextBridge.exposeInMainWorld('api', api);
   } catch (error) {
     console.error('Error inyectando el preload con contextBridge:', error);
   }
