@@ -45,12 +45,15 @@ const SlideDrawer: React.FC<SlideDrawerProps> = ({ currentId, onClick }) => {
       {/* Overlay & Drawer */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-40 transition-opacity"
-          role="dialog"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           aria-modal="true"
+          role="dialog"
         >
           {/* Click outside to close */}
-          <div className="absolute inset-0" onClick={() => setIsOpen(false)} />
+          <div 
+            className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsOpen(false)}
+          />
 
           {/* Drawer */}
           <div className="relative w-full max-w-3xl mx-auto bg-[var(--bg-color)] rounded-t-lg md:rounded-lg p-6 shadow-lg">

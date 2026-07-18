@@ -22,10 +22,9 @@ export function SongCard({
   onChange
 }: SongCardProps): React.JSX.Element {
   
-  // Utilizando tus variables CSS registradas en Tailwind v4
-  let rootStyles = 'w-[350px] p-6 bg-bg border border-border-custom rounded-lg shadow-lg';
+  let rootStyles = 'w-[350px] p-6 bg-bg border rounded-lg shadow-lg hover:border-[var(--primary-color)]';
   if (active) {
-    rootStyles += ' border-2';
+    rootStyles += ' border-2 border-[var(--secondary-color)]';
   }
 
   return (
@@ -38,13 +37,12 @@ export function SongCard({
       </p>
       
       <div className="flex mt-auto">
-        {/* React Router Link syntax */}
         <Link
-          to={`/song?id=${data.id}&playlist=true`} // 👈 Formato de URL plano y limpio
-          onClick={() => onClick?.()}
-          aria-controls="side-drawer"
-          data-drawer-hide="side-drawer"
-          className="inline-flex items-center px-3 py-2 text-md text-bg font-semibold text-center rounded-lg bg-secondary"
+        className="inline-flex items-center px-3 py-2 text-md text-bg font-semibold text-center rounded-lg bg-secondary hover:bg-[var(--primary-color)] hover:text-white"
+        to={`/song?id=${data.id}&playlist=true`}
+        data-drawer-hide="side-drawer"
+        aria-controls="side-drawer"
+        onClick={() => onClick?.()}
         >
           Presentar
           <PlayIcon className="w-[20px] h-[20px] ml-2" />
