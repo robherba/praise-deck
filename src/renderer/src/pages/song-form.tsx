@@ -21,7 +21,7 @@ export default function SongForm() {
   const { setMessage } = useMessage();
   
   const [suggestedCategories, setSuggestedCategories] = useState<string[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [slides, setSlides] = useState<SlideItem[]>([]);
 
   const [showModal, setShowModal] = useState(false);
@@ -41,13 +41,11 @@ export default function SongForm() {
     tags: '',
   });
 
-  // Query parameters.
   const id = searchParams.get('id');
   const edit = searchParams.get('edit');
 
   useElectronMessage();
 
-  // Fetch initial song details if editing.
   const loadSongData = useCallback(async () => {
     if (id) {
       try {
@@ -89,7 +87,6 @@ export default function SongForm() {
     loadSongData();
   }, [loadSongData]);
 
-  // Load category suggestions on mount.
   useEffect(() => {
     const getCategories = async () => {
       const data = await window.api.getCategories();
@@ -103,7 +100,6 @@ export default function SongForm() {
     fetchTypes();
   }, []);
 
-  // Update song text input values.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setSong((prev) => ({
@@ -112,7 +108,6 @@ export default function SongForm() {
     }));
   };
 
-  // Select or deselect matching chorus slides automatically.
   const handleToggleChorus = (selectedIndex: number) => {
     const targetSlide = slides[selectedIndex];
     if (!targetSlide) return;
@@ -140,7 +135,6 @@ export default function SongForm() {
     }
   };
 
-  // Open editor or insertion modal.
   const handleOpenModal = (index: number | null = null, isInsertion: boolean = false) => {
     if (isInsertion) {
       setEditIndex(null);
@@ -169,7 +163,6 @@ export default function SongForm() {
     setShowModal(true);
   };
 
-  // Duplicate current chorus slides at specific position.
   const handleChooseCloneChorus = () => {
     setShowDecisionModal(false);
     if (insertIndex === null) return;
@@ -193,7 +186,6 @@ export default function SongForm() {
     setInsertIndex(null);
   };
 
-  // Apply additions or edits to slide state list.
   const handleSaveModal = () => {
     if (!modalText.trim()) return;
 
@@ -215,7 +207,6 @@ export default function SongForm() {
     setInsertIndex(null);
   };
 
-  // Save changes and redirect back.
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -251,7 +242,6 @@ export default function SongForm() {
     navigate('/');
   };
 
-  // Delete current record from database.
   const handleDelete = async () => {
     if (!id) return;
     await window.api.deleteSong(parseInt(id, 10));
@@ -298,7 +288,11 @@ export default function SongForm() {
               id="category"
               value={song.category}
               onChange={handleInputChange}
-              className="w-full rounded-lg p-2.5 border border-[var(--border-color)] bg-[var(--bg-color)] text-[var(--text-color)] font-medium focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)] outline-none"
+              className="w-full rounded-lg p-2.5 pr-10 border border-[var(--border-color)] bg-[var(--bg-color)] text-[var(--text-color)] font-medium focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)] outline-none appearance-none bg-no-repeat bg-[right_16px_center]"
+              style={{
+                backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+                backgroundSize: '16px'
+              }}
             >
               {suggestedCategories.map((label, idx) => {
                 const val = String(label).toLowerCase();
@@ -317,10 +311,14 @@ export default function SongForm() {
               id="tags"
               value={song.tags}
               onChange={handleInputChange}
-              className="w-full rounded-lg p-2.5 border border-[var(--border-color)] bg-[var(--bg-color)] text-[var(--text-color)] font-medium focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)] outline-none"
+              className="w-full rounded-lg p-2.5 pr-10 border border-[var(--border-color)] bg-[var(--bg-color)] text-[var(--text-color)] font-medium focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)] outline-none appearance-none bg-no-repeat bg-[right_16px_center]"
+              style={{
+                backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+                backgroundSize: '16px'
+              }}
             >
-              <option value="" className="bg-[var(--bg-color)] text-[var(--text-color)]">Predeterminado</option>
-              {categories?.filter((category) => category.label !== "Predeterminado").map((label, idx) => {
+              <option value="predeterminado" className="bg-[var(--bg-color)] text-[var(--text-color)]">Predeterminado</option>
+              {categories?.filter((cat) => String(cat).toLowerCase() !== "predeterminado").map((label, idx) => {
                 const val = String(label).toLowerCase();
                 return (
                   <option key={idx} value={val} className="bg-[var(--bg-color)] text-[var(--text-color)]">
@@ -438,7 +436,7 @@ export default function SongForm() {
               type="submit" 
               className="w-full sm:w-auto min-w-[150px] bg-[var(--primary-color)] text-[var(--text-color-inverted)] py-2.5 px-5 rounded-xl font-semibold shadow-md opacity-90 hover:opacity-100 transition-all cursor-pointer border border-transparent"
             >
-              Guardar Canto
+              Guardar
             </button>
           </div>
         </div>

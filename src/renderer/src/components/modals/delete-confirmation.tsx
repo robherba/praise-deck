@@ -39,7 +39,7 @@ export function DeleteConfirmation({ onDelete }: DeleteConfirmationProps) {
         onClick={() => setOpenModal(true)}
         className="font-heading ml-auto underline text-md py-2 hover:underline mx-auto cursor-pointer"
       >
-        Eliminar canto
+        Eliminar
       </span>
 
       {openModal && (

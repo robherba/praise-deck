@@ -123,7 +123,7 @@ export default function SlideModal({
               disabled={!value.trim()}
               className="w-full sm:w-auto min-w-[150px] bg-[var(--primary-color)] text-[var(--text-color-inverted)] py-2.5 px-5 rounded-xl font-semibold shadow-md opacity-90 hover:opacity-100 transition-all cursor-pointer border border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Agregar diapositiva
+              Guardar
             </button>
           </footer>
         </div>
